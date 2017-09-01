@@ -32,6 +32,7 @@
       }
     },
     created() {
+      // 为何把请求数据放在这个钩子函数中 https://zhuanlan.zhihu.com/p/27407024
       this._getRecommend()
     },
     methods: {

@@ -4,7 +4,7 @@
       <slot></slot>
     </div>
     <div class="dots">
-      <span class="dot" vv-for="item in dots"></span>
+      <span class="dot" v-for="(item,index) in dots" :class="{active:currentPageIndex === index}"></span>
     </div>
   </div>
 </template>
@@ -16,7 +16,8 @@
     data() {
       return {
         dots: [],
-        children: []
+        // children: [],
+        currentPageIndex: 0
       }
     },
     props: {
@@ -39,23 +40,35 @@
         this._setSliderWidth()
         this._initDots()
         this._initSlider()
+        if(this.autoPlay){
+          this._play()
+        }
       }, 20)
+      // 窗口发生改变时，要重新计算轮播大小
+      window.addEventListener('resize',() =>{
+        if(!this.slider){
+          return
+        }
+        this._setSliderWidth(true)
+        this.slider.refresh()
+      })
     },
     methods: {
-      _setSliderWidth() {
-        // ?children是dom属性还是$的方法
+      _setSliderWidth(isResize) {
+        // children是vuejs里 的特有dom属性
         this.children = this.$refs.sliderGroup.children
+        window.dom = this.$refs.sliderGroup
         let width = 0
         // dom元素的属性
         let sliderWidth = this.$refs.slider.clientWidth
-        console.log('sliderWidth=' + sliderWidth)
+        console.log(this.children.length)
         for (let i = 0; i < this.children.length; i++) {
           let child = this.children[i]
           addClass(child, 'slider-item')
           child.style.width = sliderWidth + 'px'
           width += sliderWidth
         }
-        if (this.loop) {
+        if (this.loop && !isResize) {
           // 无缝滚动时候左右两边各克隆一个dom
           width += 2 * sliderWidth
         }
@@ -72,9 +85,30 @@
           snapThreshold: 0.3,
           snapSpeed: 400
         })
+        this.slider.on('scrollEnd', ()=> {
+         let pageIndex = this.slider.getCurrentPage().pageX
+         if(this.loop){
+           // 无缝滚动要减去头自动添加的一个dom个数
+           pageIndex -= 1
+         }
+         this.currentPageIndex = pageIndex
+         if(this.autoPlay){
+           clearTimeout(this.timer)
+           this._play()
+         }
+       })
       },
       _initDots() {
-        this.dots = new Array(this.children.length)
+         this.dots = new Array(this.children.length)
+      },
+      _play(){
+        let pageIndex = this.currentPageIndex + 1
+        if(this.loop) {
+          pageIndex += 1
+        }
+       this.timer = setTimeout(()=>{
+          this.slider.goToPage(pageIndex,0,400)
+       },this.interval)
       }
     }
   }
