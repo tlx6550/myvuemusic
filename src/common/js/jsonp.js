@@ -29,7 +29,6 @@ function param(data) {
   /* data={"g_tk":1928093487,"inCharset":"utf-8","outCharset":"utf-8","notice":0,"format":"jsonp","platform":"h5","uin":0,"needNewCode":1} */
   let url = ''
   for (var k in data) {
-    console.log('k=' + k)
     let value = data[k] !== undefined ? data[k] : ''
     url += '&' + k + '=' + encodeURIComponent(value)
   }
