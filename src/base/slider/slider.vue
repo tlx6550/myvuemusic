@@ -61,7 +61,6 @@
         let width = 0
         // dom元素的属性
         let sliderWidth = this.$refs.slider.clientWidth
-        console.log(this.children.length)
         for (let i = 0; i < this.children.length; i++) {
           let child = this.children[i]
           addClass(child, 'slider-item')
