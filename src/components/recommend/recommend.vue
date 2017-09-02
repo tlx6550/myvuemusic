@@ -1,11 +1,11 @@
 <template>
   <div class="recommend">
-    <div class="recommend-content">
+    <scroll class="recommend-content" :data="discList" ref="scroll">
       <div v-if="recommends.length" class="slider-wrapper">
         <slider>
           <div v-for="item in recommends">
             <a :href="item.linkUrl">
-              <img :src="item.picUrl">
+              <img @load="loadImage" :src="item.picUrl">
             </a>
           </div>
         </slider>
@@ -13,27 +13,39 @@
       <div class="recommend-list">
         <h1 class="list-title">热门歌单推荐</h1>
         <ul>
-          <li></li>
+          <li v-for="item in discList" class="item">
+            <div class="icon">
+              <img :src="item.imgurl" width="60" height="60">
+            </div>
+            <div class="text">
+              <h2 class="name" v-html="item.creator.name"></h2>
+              <p class="desc" v-html="item.dissname"></p>
+              <!--<h2 class="name">{{item.creator.name}}</h2>
+              <p class="desc">{{item.dissname}}</p>-->
+            </div>
+          </li>
         </ul>
       </div>
-    </div>
+    </scroll>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
-  import {getRecommend} from 'api/recommend'
+  import {getRecommend,getDiscList} from 'api/recommend'
   import {ERR_OK} from 'api/config'
   import Slider from 'base/slider/slider'
-
+  import Scroll from 'base/scroll/scroll'
   export default {
     data() {
       return {
-        recommends: []
+        recommends: [],
+        discList:[]
       }
     },
     created() {
       // 为何把请求数据放在这个钩子函数中 https://zhuanlan.zhihu.com/p/27407024
       this._getRecommend()
+      this._getDiscList()
     },
     methods: {
       _getRecommend() {
@@ -42,10 +54,25 @@
             this.recommends = res.data.slider
           }
         })
+      },
+      _getDiscList(){
+        getDiscList().then((res)=>{
+          if(res.code === ERR_OK){
+            this.discList = res.data.list
+          }
+        })
+      },
+      loadImage(){
+        // 图片加载事件只执行一次，保证滚动高度可行
+        if(!this.checkLoad){
+          this.$refs.scroll.refresh();
+          this.checkLoad = true;
+        }
       }
     },
     components: {
-      Slider
+      Slider,
+      Scroll
     }
   }
 </script>
