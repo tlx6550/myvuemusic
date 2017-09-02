@@ -19,3 +19,8 @@ npm run build --report
 ```
 
 For detailed explanation on how things work, checkout the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
+1.使用图片懒加载技术优化体验
+  <!--fastclik 与 better-scroll冲突， 由于我们在滚动组件需要点击事件，
+      而fastclick会阻止默认行为，
+      所以要加上needsclick类，让其知道这需要点击-->
+2.封装loading组件，优化加载体验

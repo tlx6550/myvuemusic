@@ -57,7 +57,6 @@
       _setSliderWidth(isResize) {
         // children是vuejs里 的特有dom属性
         this.children = this.$refs.sliderGroup.children
-        window.dom = this.$refs.sliderGroup
         let width = 0
         // dom元素的属性
         let sliderWidth = this.$refs.slider.clientWidth

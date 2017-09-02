@@ -1,30 +1,39 @@
 <template>
   <div class="recommend">
     <scroll class="recommend-content" :data="discList" ref="scroll">
-      <div v-if="recommends.length" class="slider-wrapper">
-        <slider>
-          <div v-for="item in recommends">
-            <a :href="item.linkUrl">
-              <img @load="loadImage" :src="item.picUrl">
-            </a>
-          </div>
-        </slider>
+      <div>
+        <div v-if="recommends.length" class="slider-wrapper">
+          <slider>
+            <div v-for="item in recommends">
+              <a :href="item.linkUrl">
+                <img @load="loadImage" :src="item.picUrl">
+              </a>
+            </div>
+          </slider>
+        </div>
+        <div class="recommend-list">
+          <h1 class="list-title">热门歌单推荐</h1>
+          <ul>
+            <li v-for="item in discList" class="item">
+              <div class="icon">
+                <!--fastclik 与 better-scroll冲突，
+                由于我们在滚动组件需要点击事件，
+                而fastclick会阻止默认行为，
+                所以要加上类，让其知道这需要点击-->
+                <img class="needsclick" v-lazy="item.imgurl" width="60" height="60">
+              </div>
+              <div class="text">
+                <h2 class="name" v-html="item.creator.name"></h2>
+                <p class="desc" v-html="item.dissname"></p>
+                <!--<h2 class="name">{{item.creator.name}}</h2>
+                <p class="desc">{{item.dissname}}</p>-->
+              </div>
+            </li>
+          </ul>
+        </div>
       </div>
-      <div class="recommend-list">
-        <h1 class="list-title">热门歌单推荐</h1>
-        <ul>
-          <li v-for="item in discList" class="item">
-            <div class="icon">
-              <img :src="item.imgurl" width="60" height="60">
-            </div>
-            <div class="text">
-              <h2 class="name" v-html="item.creator.name"></h2>
-              <p class="desc" v-html="item.dissname"></p>
-              <!--<h2 class="name">{{item.creator.name}}</h2>
-              <p class="desc">{{item.dissname}}</p>-->
-            </div>
-          </li>
-        </ul>
+      <div class="loading-container" v-show="!discList.length">
+        <loading></loading>
       </div>
     </scroll>
   </div>
@@ -35,6 +44,7 @@
   import {ERR_OK} from 'api/config'
   import Slider from 'base/slider/slider'
   import Scroll from 'base/scroll/scroll'
+  import Loading from 'base/loading/loading'
   export default {
     data() {
       return {
@@ -72,7 +82,8 @@
     },
     components: {
       Slider,
-      Scroll
+      Scroll,
+      Loading
     }
   }
 </script>
@@ -92,6 +103,7 @@
         width: 100%
         overflow: hidden
       .recommend-list
+        background-color :$color-background
         .list-title
           height: 65px
           line-height: 65px
