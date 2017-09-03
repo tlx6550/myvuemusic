@@ -23,4 +23,13 @@ For detailed explanation on how things work, checkout the [guide](http://vuejs-t
   <!--fastclik 与 better-scroll冲突， 由于我们在滚动组件需要点击事件，
       而fastclick会阻止默认行为，
       所以要加上needsclick类，让其知道这需要点击-->
+
 2.封装loading组件，优化加载体验
+
+3.封装一个有序的达到需求的map数据结构map｛key，value｝
+  3.2把歌手头像通过新建类singer抽象公用方法调用
+  class Singer {
+    constructor(name, id) {
+      this.name = name;
+      this.id = id;
+    }
