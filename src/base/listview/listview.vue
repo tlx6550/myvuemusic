@@ -26,6 +26,12 @@
         </li>
       </ul>
     </div>
+    <div class="list-fixed" ref="fixed" v-show="fixedTitle">
+      <div class="fixed-title">{{fixedTitle}} </div>
+    </div>
+    <div v-show="!data.length" class="loading-container">
+      <loading></loading>
+    </div>
   </scroll>
 </template>
 
@@ -35,6 +41,7 @@
   import {getData} from 'common/js/dom'
   // 右侧列表每个元素的高度
   const  ANCHOR_HEIGHT = 18
+  const TITLE_HEIGHT = 30
 export default {
   props:{
       data:{
@@ -54,7 +61,10 @@ export default {
     //需要观察的数据
     return{
       scrollY: -1,
-      currentIndex: 0
+      currentIndex: 0,
+      // 歌手列表固定标题 与滚动对应标题的距离
+      //实现友好滚动体验
+      diff: -1
     }
   },
   methods:{
@@ -80,6 +90,16 @@ export default {
       this.scrollY = pos.y
     },
     _scrollTo(index){
+      //阻止点击右侧列表最前最后段空白区域触发
+      if(!index && index !== 0){
+        return
+      }
+      if(index < 0){
+        index = 0
+      }else if(index > this.listHeight.length -2){
+        index = this.listHeight.length -2
+      }
+      this.scrollY = -this.listHeight[index]
       // 原来的组件滚动方法并没有写形参，但是通过apply方法传入arguments可解决
       this.$refs.listview.scrollToElement(this.$refs.listGroup[index],0)
     },
@@ -108,7 +128,13 @@ export default {
         /*return this.data.map((group)=>{
           return group.title.substr(0,1)
         })*/
-      }
+      },
+    fixedTitle(){
+        if(this.scrollY > 0 ){
+           return ''
+        }
+        return this.data[this.currentIndex]? this.data[this.currentIndex].title : ''
+    }
   },
   watch:{
     data(){
@@ -117,21 +143,39 @@ export default {
       },20)
     },
     scrollY(newY){
-
       const listHeight = this.listHeight
-      for(let i = 0;i < listHeight.length;i++){
+      // 当滚动到顶部
+      if(newY > 0){
+        this.currentIndex = 0
+      }
+      // 在中间部分滚动
+      for(let i = 0;i < listHeight.length-1;i++){
         let height1 = listHeight[i]
         let height2 = listHeight[i+1]
-        if(!height2 || (-newY > height1 && -newY < height2)){
+        if(!height2 || (-newY >= height1 && -newY < height2)){
           this.currentIndex = i
-          console.log(this.currentIndex)
+          /*console.log('newY=' + newY)
+          console.log(height2)*/
+          //滚动距离之差
+          this.diff = height2 - Math.abs(newY)
           return
         }
       }
-      this.currentIndex = 0
+      // 当滚动到底部，且-newY大于最后一个元素的上限
+      this.currentIndex = listHeight.length - 2
+    },
+    diff(newVal) {
+      console.log('newY=' + newVal)
+      let fixedTop = (newVal > 0 && newVal < TITLE_HEIGHT) ? newVal - TITLE_HEIGHT : 0
+      if (this.fixedTop === fixedTop) {
+        return
+      }
+      this.fixedTop = fixedTop
+      this.$refs.fixed.style.transform = `translate3d(0,${fixedTop}px,0)`
     }
   },
   components:{
+    Loading,
     Scroll
   }
 }
