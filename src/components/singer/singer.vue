@@ -1,6 +1,8 @@
 <template>
   <div  class="singer" ref="singer">
-    <list-view :data="singers"></list-view>
+    <list-view @select="selectSinger" :data="singers"></list-view>
+    <!--需要路由组件承载子控件-->
+    <router-view></router-view>
   </div>
 </template>
 
@@ -10,6 +12,8 @@
   import Singer from 'common/js/singer'
   // 驼峰写法，写页面标签时候，组件标签一定要加破折号才能正确引人
   import ListView from 'base/listview/listview'
+  //创建组件方法提交 mutation
+  import {mapMutations} from 'vuex'
   const HOT_NAME = '热门'
   const HOT_SINGER_LEN = 10
   export default {
@@ -22,11 +26,17 @@
       this._getSingerList()
     },
     methods:{
+      selectSinger(singer){
+        //编程式的导航https://router.vuejs.org/zh-cn/essentials/navigation.html
+        this.$router.push({
+          path:`/singer/${singer.id}`
+        })
+        this.setSinger(singer)
+      },
       _getSingerList(){
         getSingerList().then((res)=>{
           if(res.code === ERR_OK){
             this.singers = this._normalizeSinger(res.data.list)
-            console.log(this.singers)
           }
         })
       },
@@ -73,7 +83,12 @@
         })
         // 数组连接
         return hot.concat(ret)
-      }
+      },
+      // 使用对象展开运算符将 getters 混入 methods 对象中
+      ...mapMutations({
+        // 映射 this.setSinger() 为 this.$store.commit('SET_SINGER')
+        setSinger:'SET_SINGER'
+      })
     },
     components:{
       ListView

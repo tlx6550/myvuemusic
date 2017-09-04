@@ -1,7 +1,7 @@
-import {getLyric} from 'api/song'
+// import {getLyric} from 'api/song'
 import {ERR_OK} from 'api/config'
 import {Base64} from 'js-base64'
-
+//定制歌曲详情数据类，使得服务器返回的数据可以按照需求展示
 export default class Song {
   constructor({id, mid, singer, name, album, duration, image, url}) {
     this.id = id
@@ -31,7 +31,7 @@ export default class Song {
     })
   }
 }
-
+//创建工厂方法
 export function createSong(musicData) {
   return new Song({
     id: musicData.songid,
@@ -45,6 +45,7 @@ export function createSong(musicData) {
   })
 }
 
+//过滤歌手信息，只抽取歌手名字
 function filterSinger(singer) {
   let ret = []
   if (!singer) {

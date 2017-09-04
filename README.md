@@ -33,3 +33,8 @@ For detailed explanation on how things work, checkout the [guide](http://vuejs-t
       this.name = name;
       this.id = id;
     }
+4.详情数据抓取
+  列表点击跳转到详情页
+  定制歌曲详情数据
+  使用Vuex管理数据状态
+  详情页搭建

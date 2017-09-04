@@ -3,12 +3,13 @@
           :data="data"
           ref="listview"
           :listenScroll="listenScroll"
-          @scroll="scroll" :probeType="probeType">
+          @scroll="scroll"
+          :probeType="probeType">
     <ul>
       <li v-for="group in data" class="list-group" ref="listGroup">
         <h2 class="list-group-title">{{group.title}}</h2>
         <ul>
-          <li v-for="item in group.items" class="list-group-item">
+          <li @click="selectItem(item)" v-for="item in group.items" class="list-group-item">
             <img v-lazy="item.avatar"  class="avatar">
             <span class="name">{{item.name}}</span>
           </li>
@@ -68,6 +69,9 @@ export default {
     }
   },
   methods:{
+    selectItem(item){
+      this.$emit('select',item)
+    },
     onShortcutTouchStart(e){
         let anchorIndex = getData(e.target,'index')
         // 手指刚触碰的位置
@@ -162,10 +166,11 @@ export default {
         }
       }
       // 当滚动到底部，且-newY大于最后一个元素的上限
+      //?this.currentIndex = listHeight.length - 2
       this.currentIndex = listHeight.length - 2
+
     },
     diff(newVal) {
-      console.log('newY=' + newVal)
       let fixedTop = (newVal > 0 && newVal < TITLE_HEIGHT) ? newVal - TITLE_HEIGHT : 0
       if (this.fixedTop === fixedTop) {
         return
