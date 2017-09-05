@@ -38,3 +38,4 @@ For detailed explanation on how things work, checkout the [guide](http://vuejs-t
   定制歌曲详情数据
   使用Vuex管理数据状态
   详情页搭建
+  6.7
