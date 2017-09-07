@@ -4,6 +4,8 @@ import App from './App'
 import fastclick from 'fastclick'
 import router from './router'
 import store from './srore'
+// 等价于
+// import store from './srore/index'
 import 'common/stylus/index.styl'
 import VueLazyLoad from 'vue-lazyload'
 
