@@ -38,4 +38,15 @@ For detailed explanation on how things work, checkout the [guide](http://vuejs-t
   定制歌曲详情数据
   使用Vuex管理数据状态
   详情页搭建
-  6.7
+5--
+使用vuex
+  mutations
+  actions
+  把数据状态统一管理
+1.初步理解单一状态树（state）
+2.getters--从状态数获取数据源（或依赖起计算数据）
+  可在计算属性computed 通过mapGetters混入计算熟悉
+3.Mutations--提交更改state的方式
+  可在methods中通过mapMutations 辅助函数混入methods 调用（需要在根节点注入 store），
+  这样methods就可以调用更改状态的方法了
+4.Actions--批量提交Mutations的方式

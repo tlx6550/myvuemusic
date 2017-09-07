@@ -31,6 +31,7 @@
         this.$router.push({
           path:`/singer/${singer.id}`
         })
+        //提交到状态树state里
         this.setSinger(singer)
       },
       _getSingerList(){
@@ -84,7 +85,7 @@
         // 数组连接
         return hot.concat(ret)
       },
-      // 使用对象展开运算符将 getters 混入 methods 对象中
+      // 使用对象展开运算符将 getters 混入 methods 对象中，method就有了更改状态的方法了
       ...mapMutations({
         // 映射 this.setSinger() 为 this.$store.commit('SET_SINGER')
         setSinger:'SET_SINGER'

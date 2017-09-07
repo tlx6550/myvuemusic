@@ -3,7 +3,7 @@ import * as types from './mutation-types'
 
 const matutaions = {
   //可以向 store.commit 传入额外的参数，即 mutation 的 载荷（payload）：
-  [types.SET_SINGE](state,singer){
+  [types.SET_SINGER](state,singer){
     state.singer = singer
   },
   [types.SET_PLAYING_STATE](state,flag){

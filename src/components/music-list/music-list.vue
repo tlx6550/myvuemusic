@@ -77,6 +77,16 @@
       },
       selectItem(item,index){
         //使用actions映射过来的方法
+        /*console.log('this.selectPlay:'+this.selectPlay)
+        this.selectPlay:function boundFn(a) {
+          var l = arguments.length;
+          return l
+            ? l > 1
+              ? fn.apply(ctx, arguments)
+              : fn.call(ctx, a)
+            : fn.call(ctx)
+        }*/
+        // 自动进行参数个数的判定，从而执行相应的方法
         this.selectPlay({
           list:this.songs,
           index:index
@@ -84,6 +94,7 @@
       },
       ...mapActions([
         //// 映射 this.selectPlay() 为 this.$store.dispatch('selectPlay')
+        //methods就有执行提交mutations的方法了
         'selectPlay'
       ])
     },
