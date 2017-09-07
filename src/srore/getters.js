@@ -1,6 +1,6 @@
-//组件可以通过类似getter方式获取了
+//组件可以通过类似计算属性方式获取了
 import state from './state'
-// var state = function(){return state.singer}
+// var state = function(state){return state.singer}
 // singer = state
 export const singer = state => state.singer
 export const playing = state => state.playing
