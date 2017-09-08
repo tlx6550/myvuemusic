@@ -50,3 +50,8 @@ For detailed explanation on how things work, checkout the [guide](http://vuejs-t
   可在methods中通过mapMutations 辅助函数混入methods 调用（需要在根节点注入 store），
   这样methods就可以调用更改状态的方法了
 4.Actions--批量提交Mutations的方式
+
+7.1
+  js动画钩子函数实现播放器动画切换
+  使用create-keyframe-animation 模块实现加载动态数据 插入关键帧
+7.2 Vuex管理播放播放状态
