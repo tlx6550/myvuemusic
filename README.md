@@ -44,8 +44,8 @@ For detailed explanation on how things work, checkout the [guide](http://vuejs-t
   actions
   把数据状态统一管理
 1.初步理解单一状态树（state）
-2.getters--从状态数获取数据源（或依赖起计算数据）
-  可在计算属性computed 通过mapGetters混入计算熟悉
+2.getters--从状态数获取数据源（或依赖其计算数据）
+  可在计算属性computed 通过mapGetters混入计算属性
 3.Mutations--提交更改state的方式
   可在methods中通过mapMutations 辅助函数混入methods 调用（需要在根节点注入 store），
   这样methods就可以调用更改状态的方法了
