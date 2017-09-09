@@ -31,22 +31,23 @@
           <span class="dot"></span>
         </div>
         <div class="progress-wrapper">
-          <span class="time time-l"></span>
+          <span class="time time-l">{{format(currentTime)}}</span>
           <div class="progress-bar-wrapper">
+            <progress-bar :percent="percent"></progress-bar>
           </div>
-          <span class="time time-r"></span>
+          <span class="time time-r">{{format(currentSong.duration)}}</span>
         </div>
         <div class="operators">
           <div class="icon i-left">
             <i class="icon-sequence"></i>
           </div>
-          <div class="icon i-left">
+          <div class="icon i-left"  :class="disableCls">
             <i @click="prev" class="icon-prev"></i>
           </div>
-          <div class="icon i-center">
+          <div class="icon i-center"  :class="disableCls">
             <i @click="togglePlaying" :class="playIcon"></i>
           </div>
-          <div class="icon i-right">
+          <div class="icon i-right"  :class="disableCls">
             <i @click="next" class="icon-next"></i>
           </div>
           <div class="icon i-right">
@@ -74,7 +75,7 @@
       </div>
     </div>
     </transition>
-    <audio ref="audio" :src="currentSong.url"></audio>
+    <audio @timeupdate="updateTime" @canplay="ready" @error="error" ref="audio" :src="currentSong.url"></audio>
   </div>
 </template>
 
@@ -82,9 +83,18 @@
   import {mapGetters,mapMutations} from 'vuex'
   // 创建关键帧动画脚本
   import animations from 'create-keyframe-animation'
+  import ProgressBar from 'base/progress-bar/progress-bar'
   import {prefixStyle} from 'common/js/dom'
   const transform = prefixStyle('transform')
   export default {
+    data(){
+     return {
+       songReady:false,
+       // 歌曲当前时间
+       // 接口文档http://www.runoob.com/tags/ref-av-dom.html
+       currentTime:0
+     }
+    },
     computed:{
       // mapGetters 辅助函数仅仅是将 store 中的 getters 映射到局部计算属性：
       ...mapGetters([
@@ -102,6 +112,12 @@
       },
       cdCls(){
         return this.playing ? 'play' : 'play pause'
+      },
+      disableCls(){
+        return this.songReady ? '' : 'disable'
+      },
+      percent(){
+        return this.currentTime / this.currentSong.duration
       }
     },
     methods:{
@@ -175,6 +191,10 @@
         this.setPlayingState(!this.playing)
       },
       next(){
+        // 歌曲状态还没准备好
+        if( !this.songReady){
+          return
+        }
         let index = this.currentIndex + 1
         if(index === this.playlist.length){
           index = 0
@@ -183,8 +203,13 @@
         if(!this.playing){
           this.togglePlaying()
         }
+        // 点击后 重置为false
+        this.songReady = false
       },
       prev(){
+        if( !this.songReady){
+          return
+        }
         let index = this.currentIndex - 1
         if(index === -1){
           index = this.playlist.length -1
@@ -193,6 +218,34 @@
         if(!this.playing){
           this.togglePlaying()
         }
+        this.songReady = false
+      },
+      ready(){
+        this.songReady = true
+      },
+      // 当出现网络异常等情况
+      error(){
+        this.songReady = true
+      },
+      updateTime(e){
+        this.currentTime = e.target.currentTime
+      },
+      //时间格式hua
+      format(interval){
+        //interval为秒数 | 0 向下取整,相当于Math.floor()
+        interval = interval | 0 ;
+        const minute = interval / 60 | 0
+        const second = this._pad(interval % 60)
+        return `${minute}:${second}`
+      },
+      // 位数补齐
+      _pad(num , n = 2){
+        let len = num.toString().length
+        while  (len < n){
+          num = '0' + num
+          len++
+        }
+        return num
       }
     },
     watch:{
@@ -209,6 +262,9 @@
         })
 
       }
+    },
+    components:{
+      ProgressBar
     }
   }
 </script>
