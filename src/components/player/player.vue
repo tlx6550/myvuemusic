@@ -77,7 +77,7 @@
       </div>
     </div>
     </transition>
-    <audio @timeupdate="updateTime" @canplay="ready" @error="error" ref="audio" :src="currentSong.url"></audio>
+    <audio @timeupdate="updateTime" @canplay="ready" @error="error" ref="audio" @ended="end" :src="currentSong.url"></audio>
   </div>
 </template>
 
@@ -286,6 +286,18 @@
           return item.id === this.currentSong.id
         })
         this.setCurrentIndex(index)
+      },
+      end(){
+        // 如果是单曲循环播放
+        if(this.mode === playMode.loop){
+          this.loop()
+        }else{
+          this.next()
+        }
+      },
+      loop(){
+        this.$refs.audio.currentTime = 0
+        this.$refs.audio.play()
       }
     },
     watch:{
