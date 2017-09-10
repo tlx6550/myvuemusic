@@ -2,7 +2,7 @@
 import * as types from './mutation-types'
 
 const matutaions = {
-  //可以向 store.commit 传入额外的参数，即 mutation 的 载荷（payload）：
+  // 可以向 store.commit 传入额外的参数，即 mutation 的 载荷（payload）：
   [types.SET_SINGER](state,singer){
     state.singer = singer
   },
@@ -18,7 +18,7 @@ const matutaions = {
   [types.SET_SEQUENCE_LIST](state,list){
     state.sequenceList = list;
   },
-  [types.SET_PLAY_MODE](state,mode){
+  [types.SET_PLALY_MODE](state,mode){
     state.mode = mode
   },
   [types.SET_CURRENT_INDEX](state,index){

@@ -55,3 +55,9 @@ For detailed explanation on how things work, checkout the [guide](http://vuejs-t
   js动画钩子函数实现播放器动画切换
   使用create-keyframe-animation 模块实现加载动态数据 插入关键帧
 7.2 Vuex管理播放播放状态
+7.3播放进度条搭建
+在播放进度条添加触屏事件、点击事件，派发偏移信息给父组件
+本身不参与业务
+  利用svg实现圆形播放按钮随进度而改变状态
+  创建工具函数util实现洗牌函数，从而当模式改变的时候，播放列表发生相应改变
+  当播放列表发生改变的时候要保证当前播放歌曲不发生改变

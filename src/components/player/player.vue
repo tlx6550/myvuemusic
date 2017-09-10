@@ -38,8 +38,8 @@
           <span class="time time-r">{{format(currentSong.duration)}}</span>
         </div>
         <div class="operators">
-          <div class="icon i-left">
-            <i class="icon-sequence"></i>
+          <div class="icon i-left" @click="changeMode">
+            <i :class="iconMode"></i>
           </div>
           <div class="icon i-left"  :class="disableCls">
             <i @click="prev" class="icon-prev"></i>
@@ -67,8 +67,10 @@
         <p class="desc" v-html="currentSong.singer"></p>
       </div>
       <div class="control">
-         <!--阻止事件冒泡-->
-        <i @click.stop="togglePlaying" :class="minIcon"></i>
+        <progress-circle :radius="radius" :percent="percent">
+          <!--阻止事件冒泡-->
+          <i @click.stop="togglePlaying" class="icon-mini" :class="minIcon"></i>
+        </progress-circle>
       </div>
       <div class="control">
         <i class="icon-playlist"></i>
@@ -84,7 +86,10 @@
   // 创建关键帧动画脚本
   import animations from 'create-keyframe-animation'
   import ProgressBar from 'base/progress-bar/progress-bar'
+  import ProgressCircle from 'base/progress-circle/progress-circle'
   import {prefixStyle} from 'common/js/dom'
+  import {playMode} from 'common/js/config'
+  import {shuffle} from 'common/js/util'
   const transform = prefixStyle('transform')
   export default {
     data(){
@@ -92,7 +97,8 @@
        songReady:false,
        // 歌曲当前时间
        // 接口文档http://www.runoob.com/tags/ref-av-dom.html
-       currentTime:0
+       currentTime:0,
+       radius:32
      }
     },
     computed:{
@@ -102,7 +108,9 @@
         'playlist',
         'currentSong',
         'playing',
-        'currentIndex'
+        'currentIndex',
+        'mode',
+        'sequenceList'
       ]),
       playIcon(){
         return this.playing ? 'icon-pause' : 'icon-play'
@@ -118,6 +126,9 @@
       },
       percent(){
         return this.currentTime / this.currentSong.duration
+      },
+      iconMode(){
+        return this.mode === playMode.sequence ? 'icon-sequence': this.mode === playMode.loop ?  'icon-loop' : 'icon-random'
       }
     },
     methods:{
@@ -127,7 +138,9 @@
       ...mapMutations({
         setFullScreen:'SET_FULL_SCREEN',
         setPlayingState:'SET_PLAYING_STATE',
-        setCurrentIndex:'SET_CURRENT_INDEX'
+        setCurrentIndex:'SET_CURRENT_INDEX',
+        setPlayMode:'SET_PLALY_MODE',
+        setPlayList:'SET_PLAYLIST'
       }),
       open(){
         this.setFullScreen(true)
@@ -253,10 +266,34 @@
         if(!this.playing){
           this.togglePlaying()
         }
+      },
+      changeMode(){
+        const  mode = (this.mode + 1) % 3
+        this.setPlayMode(mode)
+        let list = null
+        if(mode === playMode.random){
+          list = shuffle(this.sequenceList)
+        }else {
+          list = this.sequenceList
+        }
+        // 当歌曲列表顺序改变时候，要保证当前播放的歌曲不改变
+        this.resetCurrentIndex(list)
+        this.setPlayList(list)
+      },
+      resetCurrentIndex(list){
+        // findIndex es6 语法
+        let index = list.findIndex((item)=>{
+          return item.id === this.currentSong.id
+        })
+        this.setCurrentIndex(index)
       }
     },
     watch:{
-      currentSong(){
+      currentSong(newSong,oldSong){
+        //切换模式时候，当前歌曲不要发生变化
+        if(newSong.id === oldSong.id){
+          return
+        }
         // 当audio dom元素加载完有变化后开始播放
         this.$nextTick(()=>{
           this.$refs.audio.play()
@@ -271,7 +308,8 @@
       }
     },
     components:{
-      ProgressBar
+      ProgressBar,
+      ProgressCircle
     }
   }
 </script>
