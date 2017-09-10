@@ -33,7 +33,7 @@
         <div class="progress-wrapper">
           <span class="time time-l">{{format(currentTime)}}</span>
           <div class="progress-bar-wrapper">
-            <progress-bar :percent="percent"></progress-bar>
+            <progress-bar @percentChange="onProgreesBarChange" :percent="percent"></progress-bar>
           </div>
           <span class="time time-r">{{format(currentSong.duration)}}</span>
         </div>
@@ -246,6 +246,13 @@
           len++
         }
         return num
+      },
+      onProgreesBarChange(percent){
+        this.$refs.audio.currentTime = this.currentSong.duration * percent
+        // 假如拖动的时候是暂停，则拖动后播放
+        if(!this.playing){
+          this.togglePlaying()
+        }
       }
     },
     watch:{
