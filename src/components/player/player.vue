@@ -90,6 +90,8 @@
   import {prefixStyle} from 'common/js/dom'
   import {playMode} from 'common/js/config'
   import {shuffle} from 'common/js/util'
+  // 把歌词字符串转为制定格式
+  import Lyric from 'lyric-parser'
   const transform = prefixStyle('transform')
   export default {
     data(){
@@ -98,7 +100,8 @@
        // 歌曲当前时间
        // 接口文档http://www.runoob.com/tags/ref-av-dom.html
        currentTime:0,
-       radius:32
+       radius:32,
+       currentLyric:null
      }
     },
     computed:{
@@ -298,6 +301,14 @@
       loop(){
         this.$refs.audio.currentTime = 0
         this.$refs.audio.play()
+      },
+      getLyric(){
+        // song的构造方法
+        this.currentSong.getLyric().then((lyric)=>{
+          // 歌词解码
+          this.currentLyric = new Lyric(lyric)
+          console.log(this.currentLyric)
+        })
       }
     },
     watch:{
@@ -309,6 +320,7 @@
         // 当audio dom元素加载完有变化后开始播放
         this.$nextTick(()=>{
           this.$refs.audio.play()
+          this.getLyric()
         })
       },
       playing(newPlaying){

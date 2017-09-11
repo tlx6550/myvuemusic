@@ -1,5 +1,6 @@
-// import {getLyric} from 'api/song'
+import {getLyric} from 'api/song'
 import {ERR_OK} from 'api/config'
+// 歌词解码
 import {Base64} from 'js-base64'
 //定制歌曲详情数据类，使得服务器返回的数据可以按照需求展示
 export default class Song {
@@ -13,8 +14,9 @@ export default class Song {
     this.image = image
     this.url = url
   }
-
+// 获取歌词信息
   getLyric() {
+    // 如果已经编码好了
     if (this.lyric) {
       return Promise.resolve(this.lyric)
     }

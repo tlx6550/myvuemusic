@@ -50,6 +50,8 @@ apiRoutes.get('/lyric', function (req, res) {
     params: req.query
   }).then((response) => {
     var ret = response.data
+    // MusicJsonCalback({\"retcode\":0,\"code\":0,.....})
+    // 返回的不是标准的json格式，需要转换
     if (typeof ret === 'string') {
       var reg = /^\w+\(({[^()]+})\)$/
       var matches = ret.match(reg)
