@@ -3,13 +3,17 @@ function getRandomInt(min, max) {
 }
 // 洗牌函数
 export function shuffle(arr) {
-  let _arr = arr.slice()
+  // slice方法的返回值不改版原来数组，并返回一个新的数组
+   let _arr = arr.slice()
+  //let _arr = arr
+
   for (let i = 0; i < _arr.length; i++) {
     let j = getRandomInt(0, i)
     let t = _arr[i]
     _arr[i] = _arr[j]
     _arr[j] = t
   }
+
   return _arr
 }
 

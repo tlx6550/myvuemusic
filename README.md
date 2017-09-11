@@ -61,3 +61,6 @@ For detailed explanation on how things work, checkout the [guide](http://vuejs-t
   利用svg实现圆形播放按钮随进度而改变状态
   创建工具函数util实现洗牌函数，从而当模式改变的时候，播放列表发生相应改变
   当播放列表发生改变的时候要保证当前播放歌曲不发生改变
+
+  实现点击随机播放功能
+  注意js slice方法的返回值不改版原来数组，并返回一个新的数组
