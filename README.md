@@ -64,3 +64,9 @@ For detailed explanation on how things work, checkout the [guide](http://vuejs-t
 
   实现点击随机播放功能
   注意js slice方法的返回值不改版原来数组，并返回一个新的数组
+
+  使用node服务代理获取歌词接口信息
+     处理返回数据是非json格式问题（尽管发送头信息要求回传信息format定义为json）
+     使用Base64 npm包转换歌词为字符串
+     使用lyric-parser npm包 把歌词 转为指定格式
+

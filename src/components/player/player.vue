@@ -24,6 +24,17 @@
               </div>
             </div>
           </div>
+          <scroll class="middle-r" ref="lyricList" :data="currentLyric && currentLyric.lines">
+            <div class="lyric-wrapper">
+              <div v-if="currentLyric">
+                <p class="text"
+                   :class="{'current': currentLineNum ===index}"
+                   ref="lyricLine"
+                   v-for="(line,index) in currentLyric.lines">{{line.txt}}
+                </p>
+              </div>
+            </div>
+          </scroll>
         </div>
       <div class="bottom">
         <div class="dot-wrapper">
@@ -90,6 +101,7 @@
   import {prefixStyle} from 'common/js/dom'
   import {playMode} from 'common/js/config'
   import {shuffle} from 'common/js/util'
+  import Scroll from 'base/scroll/scroll'
   // 把歌词字符串转为制定格式
   import Lyric from 'lyric-parser'
   const transform = prefixStyle('transform')
@@ -101,7 +113,9 @@
        // 接口文档http://www.runoob.com/tags/ref-av-dom.html
        currentTime:0,
        radius:32,
-       currentLyric:null
+       currentLyric:null,
+       // 当前歌词所在行
+       currentLineNum:0
      }
     },
     computed:{
@@ -306,9 +320,24 @@
         // song的构造方法
         this.currentSong.getLyric().then((lyric)=>{
           // 歌词解码
-          this.currentLyric = new Lyric(lyric)
+          this.currentLyric = new Lyric(lyric,this.handleLyric)
+          if( this.playing){
+            this.currentLyric.play()
+          }
           console.log(this.currentLyric)
         })
+      },
+      // 回调函数,注意该函数参数是一个Object
+      handleLyric({lineNum,txt}){
+        this.currentLineNum = lineNum
+        // 当歌词行数变化，滚动位置
+        if (lineNum > 5) {
+          //                       歌词行
+          let lineEl = this.$refs.lyricLine[lineNum - 5]
+          this.$refs.lyricList.scrollToElement(lineEl, 1000)
+        } else {
+          this.$refs.lyricList.scrollTo(0, 0, 1000)
+        }
       }
     },
     watch:{
@@ -333,7 +362,8 @@
     },
     components:{
       ProgressBar,
-      ProgressCircle
+      ProgressCircle,
+      Scroll
     }
   }
 </script>
