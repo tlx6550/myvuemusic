@@ -73,4 +73,8 @@ For detailed explanation on how things work, checkout the [guide](http://vuejs-t
   使用scroll组件实现歌词滚动
   当歌词行数发生变化处理滚动位置
 
+  实现歌词播放视图和CD视图动画切换
+  拖拽进度按钮，歌词跟随变化
+
+
 

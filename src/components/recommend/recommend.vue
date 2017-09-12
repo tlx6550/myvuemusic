@@ -1,5 +1,5 @@
 <template>
-  <div class="recommend">
+  <div class="recommend" ref="recommend">
     <scroll class="recommend-content" :data="discList" ref="scroll">
       <div>
         <div v-if="recommends.length" class="slider-wrapper">
@@ -45,7 +45,11 @@
   import Slider from 'base/slider/slider'
   import Scroll from 'base/scroll/scroll'
   import Loading from 'base/loading/loading'
+  // 一定要在export 声明引入
+  import {playlistMixin} from 'common/js/mixin'
   export default {
+    // 一个组件可以插入多个mixin
+    mixins:[playlistMixin],
     data() {
       return {
         recommends: [],
@@ -78,6 +82,12 @@
           this.$refs.scroll.refresh();
           this.checkLoad = true;
         }
+      },
+      handlePlaylist(playlist){
+        // 当有底部栏时，滚动组件要腾出位置 以致使滚动完列表 显示完整
+        const bottom = playlist.length > 0 ? '60px' : ''
+        this.$refs.recommend.style.bottom = bottom
+        this.$refs.scroll.refresh()
       }
     },
     components: {

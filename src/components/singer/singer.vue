@@ -1,6 +1,6 @@
 <template>
   <div  class="singer" ref="singer">
-    <list-view @select="selectSinger" :data="singers"></list-view>
+    <list-view @select="selectSinger" :data="singers" ref="list"></list-view>
     <!--需要路由组件承载子控件-->
     <router-view></router-view>
   </div>
@@ -14,9 +14,13 @@
   import ListView from 'base/listview/listview'
   //创建组件方法提交 mutation
   import {mapMutations} from 'vuex'
+  // 一定要在export 声明引入
+  import {playlistMixin} from 'common/js/mixin'
   const HOT_NAME = '热门'
   const HOT_SINGER_LEN = 10
   export default {
+    // 一个组件可以插入多个mixin
+    mixins:[playlistMixin],
     data(){
       return{
         singers:[]
@@ -84,6 +88,12 @@
         })
         // 数组连接
         return hot.concat(ret)
+      },
+      handlePlaylist(playlist){
+        // 当有底部栏时，滚动组件要腾出位置 以致使滚动完列表 显示完整
+        const bottom = playlist.length > 0 ? '60px' : ''
+        this.$refs.singer.style.bottom = bottom
+        this.$refs.list.refresh()
       },
       // 使用对象展开运算符将 getters 混入 methods 对象中，method就有了更改状态的方法了
       ...mapMutations({

@@ -31,6 +31,7 @@
   import SongList from 'base/song-list/song-list'
   import loading from 'base/loading/loading'
   import { mapActions } from 'vuex'
+  import {playlistMixin} from 'common/js/mixin'
   //浏览器前缀补齐
   import {prefixStyle} from 'common/js/dom'
   const  transform = prefixStyle('transform')
@@ -39,6 +40,8 @@
   //定义跟随滚动偏移值
   const RESERVED_HEIGTHT = 40
   export default {
+    // 一个组件可以插入多个mixin
+    mixins:[playlistMixin],
     props:{
       bgImage:{
         type:String,
@@ -96,6 +99,12 @@
         this.randomPlay({
           list:this.songs
         })
+      },
+      handlePlaylist(playlist){
+        // 当有底部栏时，滚动组件要腾出位置 以致使滚动完列表 显示完整
+        const bottom = playlist.length > 0 ? '60px' : ''
+        this.$refs.list.$el.style.bottom = bottom
+        this.$refs.list.refresh()
       },
       ...mapActions([
         //// 映射 this.selectPlay() 为 this.$store.dispatch('selectPlay')

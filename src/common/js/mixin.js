@@ -1,8 +1,12 @@
+// 当各个组件调用相同业务功能时,可以抽取共同模块出来
 import {mapGetters, mapMutations, mapActions} from 'vuex'
 import {playMode} from 'common/js/config'
 import {shuffle} from 'common/js/util'
 
+// 所引组件一定要执行这些函数,否则就会抛异常,
+// 定义组件时候,所定义的同名方法会覆盖这里定义的
 export const playlistMixin = {
+
   computed: {
     ...mapGetters([
       'playlist'
@@ -11,6 +15,7 @@ export const playlistMixin = {
   mounted() {
     this.handlePlaylist(this.playlist)
   },
+  // 当 keep-alive 组件切换时候触发
   activated() {
     this.handlePlaylist(this.playlist)
   },
@@ -26,7 +31,7 @@ export const playlistMixin = {
   }
 }
 
-export const playerMixin = {
+/*export const playerMixin = {
   computed: {
     iconMode() {
       return this.mode === playMode.sequence ? 'icon-sequence' : this.mode === playMode.loop ? 'icon-loop' : 'icon-random'
@@ -120,4 +125,4 @@ export const searchMixin = {
       'deleteSearchHistory'
     ])
   }
-}
+}*/
