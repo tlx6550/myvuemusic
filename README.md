@@ -70,3 +70,7 @@ For detailed explanation on how things work, checkout the [guide](http://vuejs-t
      使用Base64 npm包转换歌词为字符串
      使用lyric-parser npm包 把歌词 转为指定格式
 
+  使用scroll组件实现歌词滚动
+  当歌词行数发生变化处理滚动位置
+
+
