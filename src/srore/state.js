@@ -1,6 +1,7 @@
 import {playMode} from 'common/js/config'
 // 全局状态树
 const state = {
+  // 歌手对象
   singer: {},
   // 歌曲状态信息
   // 是否自动播放
@@ -13,6 +14,8 @@ const state = {
   sequenceList:[],
   mode: playMode.sequence,
   // 当前播放索引
-  currentIndex: -1
+  currentIndex: -1,
+  // 歌单对象
+  disc:{}
 }
 export default state

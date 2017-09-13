@@ -14,7 +14,6 @@ export function getSingerList() {
     needNewCode: 0,
     platform: 'yqq'
   })
-
   return jsonp(url, data, options)
 }
 export function getSingerDetail (singerId) {

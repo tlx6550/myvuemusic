@@ -76,5 +76,13 @@ For detailed explanation on how things work, checkout the [guide](http://vuejs-t
   实现歌词播放视图和CD视图动画切换
   拖拽进度按钮，歌词跟随变化
 
+  引入minxi公共组件函数
+  当各个组件调用相同业务功能时,可以抽取共同模块出来
+  解决滚动底部栏腾出问题
+
+  歌单详情页实现
+  recommend接口api按原教学中设置，会导致取热门歌单详情会报回掉函数无定义
+  需参考原npm jsonp api从新设置
+
 
 

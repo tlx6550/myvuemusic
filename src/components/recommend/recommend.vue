@@ -14,7 +14,7 @@
         <div class="recommend-list">
           <h1 class="list-title">热门歌单推荐</h1>
           <ul>
-            <li v-for="item in discList" class="item">
+            <li @click="selectItem(item)" v-for="item in discList" class="item">
               <div class="icon">
                 <!--fastclik 与 better-scroll冲突，
                 由于我们在滚动组件需要点击事件，
@@ -36,6 +36,7 @@
         <loading></loading>
       </div>
     </scroll>
+    <router-view></router-view>
   </div>
 </template>
 
@@ -47,6 +48,7 @@
   import Loading from 'base/loading/loading'
   // 一定要在export 声明引入
   import {playlistMixin} from 'common/js/mixin'
+  import {mapMutations} from 'vuex'
   export default {
     // 一个组件可以插入多个mixin
     mixins:[playlistMixin],
@@ -62,6 +64,12 @@
       this._getDiscList()
     },
     methods: {
+      selectItem(item){
+        this.$router.push({
+          path:`/recommend/${item.dissid}`
+        })
+        this.setDisc(item)
+      },
       _getRecommend() {
         getRecommend().then((res) => {
           if (res.code === ERR_OK) {
@@ -88,7 +96,10 @@
         const bottom = playlist.length > 0 ? '60px' : ''
         this.$refs.recommend.style.bottom = bottom
         this.$refs.scroll.refresh()
-      }
+      },
+      ...mapMutations({
+        setDisc:'SET_DISC'
+      })
     },
     components: {
       Slider,
