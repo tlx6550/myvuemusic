@@ -88,7 +88,12 @@ For detailed explanation on how things work, checkout the [guide](http://vuejs-t
   各个组件的style应该限定作用域，如scrop，只对本组件作用有效，
   否则可能会引起不可测的其它组件导致的冲突
 
-10
+10 歌曲搜索数据接口API实现；
+   扩展scroll组件，添加上拉刷新方法；
+   搜索页搜索框实现；
+   搜索结果页实现，
+   搜索结果更多上拉刷新实现；
+  （拓展知识：扩展运算符...）
 
 
 

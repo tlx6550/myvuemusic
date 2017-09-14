@@ -6,7 +6,7 @@
         ref="suggest"
 >
   <ul class="suggest-list">
-    <li class="suggest-item" v-for="item in result">
+    <li @click="selectItem(item)" class="suggest-item" v-for="item in result">
       <div class="icon">
         <i :class="getIconCls(item)"></i>
       </div>
@@ -16,7 +16,6 @@
     </li>
     <loading v-show="hasMore" title="玩命加载中..."></loading>
   </ul>
-
 </scroll>
 </template>
 
@@ -102,6 +101,21 @@
           return `${item.name}-${item.singer}`
         }
       },
+      // 点击跳转
+      selectItem(item){
+        if(item.type === TYPE_SINGER){
+          const singer = new Singer({
+            id:item.singermid,
+            name:item.singername
+          })
+          // 该路由实例是其父组件的路由实例
+          this.$router.push({
+            path:`/search/${singer.id}`
+          })
+          // 提交mutation
+          this.setSinger(singer)
+        }
+      },
       _normalizeSongs(list){
         let ret = []
         list.forEach((musicData)=>{
@@ -129,7 +143,10 @@
           ret = ret.concat(this._normalizeSongs(data.song.list))
         }
         return ret
-      }
+      },
+      ...mapMutations({
+        setSinger:'SET_SINGER'
+      })
     },
   components:{
     Scroll,

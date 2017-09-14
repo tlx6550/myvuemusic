@@ -18,8 +18,9 @@
     <div class="search-result" v-show="query">
       <suggest :query="query"></suggest>
     </div>
+    <!--当点击搜搜结果页跳转到相应页面-->
+    <router-view></router-view>
   </div>
-
 </template>
 
 <script type="text/ecmascript-6">
