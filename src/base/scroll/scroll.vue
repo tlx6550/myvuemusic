@@ -96,6 +96,16 @@
             me.$emit('scroll',pos)
           })
         }
+        if(this.pullup){
+          // 当停止滚动
+          let me = this
+          this.scroll.on('scrollEnd',()=>{
+            if(this.scroll.y <= (this.scroll.maxScrollY + 50)){
+              // 派发滚动到底部事件
+              me.$emit('scrollToEnd')
+            }
+          })
+        }
       },
       enable(){
         this.scroll && this.scroll.enable()

@@ -84,5 +84,11 @@ For detailed explanation on how things work, checkout the [guide](http://vuejs-t
   recommend接口api按原教学中设置，会导致取热门歌单详情会报回掉函数无定义
   需参考原npm jsonp api从新设置
 
+8.通过接收数据扩展排行榜组件
+  各个组件的style应该限定作用域，如scrop，只对本组件作用有效，
+  否则可能会引起不可测的其它组件导致的冲突
+
+10
+
 
 
