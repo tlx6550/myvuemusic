@@ -1,6 +1,7 @@
 import * as types from './mutation-types'
 import {playMode} from 'common/js/config'
 import {shuffle} from '../common/js/util'
+import { createSong } from '../common/js/song'
 
 function findIndex (list,targetSong) {
     return list.findIndex((item)=>{
@@ -38,10 +39,16 @@ export const randomPlay = function ({commit},{list}) {
 }
 // 情景：在搜索结果页点选歌曲或者歌手，跳转时候，并不是清除原先playlist
 // 而是添加修改其中的状态
-export const inserSong = function ({commit,state},song) {
-  let playlist = state.playlist
-  let sequenceList = state.sequenceList
+export const insertSong = function ({commit,state},song) {
+  // playlist 是真正要播放的歌曲
+  // 在后加slice创建 其副本，解决Do not mutate vuex store state outside mutation handlers（需要在mutation的回调函数中修改！）
+  let playlist = state.playlist.slice()
+  // sequenceList 是播放模式的歌曲列表，是要映射到playlist的
+  let sequenceList = state.sequenceList.slice()
+  // currentIndex 不用添加，因为这里并不是修改其mutation
   let currentIndex = state.currentIndex
+  // 记录当前歌曲
+  let currentSong = playlist[currentIndex]
   // 逻辑解释,假如当前插入数组如下
   /*var arr = [1,2,3,4,2]*/
   //记录当前歌曲，假如当前歌曲为4
@@ -67,4 +74,25 @@ export const inserSong = function ({commit,state},song) {
       playlist.splice(fpIndex +1 ,1)
     }
   }
+  // 新插入播放模式列表（循环，随机...）歌曲的位置
+  let currentSIndex = findIndex(sequenceList,currentSong) + 1
+  // 查找该播放列表是否有该新插入的歌曲
+  let fsIndex = findIndex(sequenceList,song)
+  // 插入歌曲
+  sequenceList.splice(currentSIndex,0,song)
+  if(fsIndex > -1){
+    // 如果当前索引大于找到的索引，则删除找到的
+    if(currentIndex > fsIndex){
+      sequenceList.splice(fsIndex,1)
+    }else{
+      // 否则就删掉后一个
+      sequenceList.splice(fsIndex + 1,1)
+    }
+  }
+
+  commit(types.SET_PLAYLIST, playlist)
+  commit(types.SET_SEQUENCE_LIST, sequenceList)
+  commit(types.SET_CURRENT_INDEX, currentIndex)
+  commit(types.SET_FULL_SCREEN, true)
+  commit(types.SET_PLAYING_STATE, true)
 }

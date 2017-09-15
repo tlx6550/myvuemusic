@@ -16,7 +16,7 @@
       </div>
     </div>
     <div class="search-result" v-show="query">
-      <suggest :query="query"></suggest>
+      <suggest @listScroll="blurInput" :query="query"></suggest>
     </div>
     <!--当点击搜搜结果页跳转到相应页面-->
     <router-view></router-view>
@@ -51,6 +51,11 @@
            this.hotKey = res.data.hotkey.slice(0,10)
           }
         })
+      },
+      // 解决当在移动端情景，在搜索输入框输入关键词时候，默认会调用
+      //移动端的键盘事件，如果输入后，用户需要滚动，则需要把该事件屏蔽
+      blurInput(){
+        this.$refs.searchBox.blur()
       }
     },
     components:{

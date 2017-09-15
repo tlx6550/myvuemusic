@@ -3,6 +3,8 @@
         :data="result"
         :pullup="pullup"
         @scrollToEnd="searchMore"
+        :beforeScroll="beforeScroll"
+        @beforeScroll="listScroll"
         ref="suggest"
 >
   <ul class="suggest-list">
@@ -14,8 +16,12 @@
         <p class="text" v-html="getDisplayName(item)"></p>
       </div>
     </li>
-    <loading v-show="hasMore" title="玩命加载中..."></loading>
+    <loading v-show="hasMore" title="加载中..."></loading>
   </ul>
+  <div v-show="!hasMore && !result.length" class="no-result-wrapper">
+    <!--传入的title是写死的，所以不用bind指令：-->
+    <no-result title="暂无搜索结果"></no-result>
+  </div>
 </scroll>
 </template>
 
@@ -27,6 +33,7 @@
   import Singer from 'common/js/singer'
   import Scroll from  'base/scroll/scroll'
   import Loading from 'base/loading/loading'
+  import NoResult from 'base/no-result/no-result'
   const TYPE_SINGER = 'singer'
   const perpage = 20
   export default {
@@ -38,7 +45,9 @@
         // 开启上拉刷新
         pullup:true,
         //标识
-        hasMore:true
+        hasMore:true,
+        //开始滚动之前
+        beforeScroll:true
       }
     },
     props:{
@@ -114,6 +123,8 @@
           })
           // 提交mutation
           this.setSinger(singer)
+        }else{
+          this.insertSong(item)
         }
       },
       _normalizeSongs(list){
@@ -144,13 +155,20 @@
         }
         return ret
       },
+      listScroll(){
+        this.$emit('listScroll')
+      },
       ...mapMutations({
         setSinger:'SET_SINGER'
+      }),
+      ...mapActions({
+        insertSong:'insertSong'
       })
     },
   components:{
     Scroll,
-    Loading
+    Loading,
+    NoResult
   },
     watch:{
       query(){

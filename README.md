@@ -95,5 +95,9 @@ For detailed explanation on how things work, checkout the [guide](http://vuejs-t
    搜索结果更多上拉刷新实现；
   （拓展知识：扩展运算符...）
 
+  添加搜索结果页跳转；
+  使用action批量提交mutation，
+  改变当前播放列表，而不是清空现有的！
+
 
 
