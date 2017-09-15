@@ -107,12 +107,13 @@
           })
         }
         if(this.beforeScroll){
+          // 派发发送滚动前的事件
           this.scroll.on('beforeScrollStart',()=>{
             this.$emit('beforeScroll')
           })
-        }
-      },
-      enable(){
+      }
+    },
+    enable(){
         this.scroll && this.scroll.enable()
       },
       disable() {

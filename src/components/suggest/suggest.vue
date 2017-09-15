@@ -126,6 +126,8 @@
         }else{
           this.insertSong(item)
         }
+        // 向外派发被选择事件（记录该歌曲进历史列表），本身不做该事情
+        this.$emit('select')
       },
       _normalizeSongs(list){
         let ret = []

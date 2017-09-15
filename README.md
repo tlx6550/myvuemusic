@@ -99,5 +99,11 @@ For detailed explanation on how things work, checkout the [guide](http://vuejs-t
   使用action批量提交mutation，
   改变当前播放列表，而不是清空现有的！
 
+  1.添加搜索页点选歌曲，修改原歌曲列表的mutation；注意修改状态树state里面的状态，需要在mutation的回掉函数里面进行，如果需要事先修改可以通过（数组）的slice方法创建副本（内容一样，但是内存指针不一样了）然后在进行提交mutation；
+  2.优化搜索页边界条件情况，（添加一个组件）当无搜索结果的友好提示
+  3.优化当在移动端情景，输入框输入内容时，键盘弹入弹出的处理
+  4.引入节流函数，优化快速改变搜索关键词而不断向后台发送数据请求的问题
+
+
 
 

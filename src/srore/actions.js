@@ -96,3 +96,8 @@ export const insertSong = function ({commit,state},song) {
   commit(types.SET_FULL_SCREEN, true)
   commit(types.SET_PLAYING_STATE, true)
 }
+
+//封装保存搜索结果的mutation，并把结果缓存到localstore中，以便浏览器关掉再打开可以继续查看
+/*export const saveSearchHistory = function ({commit},query) {
+
+}*/
