@@ -3,32 +3,39 @@
     <div class="search-box-wrapper">
       <search-box @query="onQueryChange" ref="searchBox"></search-box>
     </div>
-    <div class="shortcut-wrapper" v-show="!query">
-      <div class="shortcut">
-        <div class="hot-key">
-          <h1 class="title">热门搜索</h1>
-          <ul>
-            <li @click="addQuery(item.k)" class="item" v-for="item in hotKey">
-              <span>{{item.k}}</span>
-            </li>
-          </ul>
-        </div>
-        <div class="search-history" v-show="searchHistory.length">
-          <h1 class="title">
-            <span class="text">搜索历史</span>
-             <!--<span class="clear" @click="deleteAll">-->
-             <!--等价于下面，直接使用mapActions的混入方法，注意参数是否要传递，是否要显式传递，是否已经映射过来clearSearchHistory-->
-               <span class="clear" @click="clearSearchHistory">
+    <div ref="shortcutWrapper" class="shortcut-wrapper" v-show="!query">
+      <!--scroll组件只对其中第一个子元素的高度计算是否滚动，
+      针对该组件有两个并级的元素，需要引人一个div包裹他们-->
+      <!--绑定的data是用一个计算属性shotcut，因为其子元素的数据都是异步获取的，
+      所以只要其中一个变化，那么data将再次计算-->
+      <scroll ref="shortcut" class="shortcut" :data="shortcut">
+        <div>
+          <div class="hot-key">
+            <h1 class="title">热门搜索</h1>
+            <ul>
+              <li @click="addQuery(item.k)" class="item" v-for="item in hotKey">
+                <span>{{item.k}}</span>
+              </li>
+            </ul>
+          </div>
+          <div class="search-history" v-show="searchHistory.length">
+            <h1 class="title">
+              <span class="text">搜索历史</span>
+              <!--<span class="clear" @click="deleteAll">-->
+              <!--等价于下面，直接使用mapActions的混入方法，注意参数是否要传递，是否要显式传递，是否已经映射过来clearSearchHistory-->
+              <span class="clear" @click="showConfirm">
                <i class="icon-clear"></i>
              </span>
-          </h1>
-          <search-list @select="addQuery" :searches="searchHistory" @delete="deleteOne"></search-list>
+            </h1>
+            <search-list @select="addQuery" :searches="searchHistory" @delete="deleteOne"></search-list>
+          </div>
         </div>
-      </div>
+      </scroll>
     </div>
-    <div class="search-result" v-show="query">
-      <suggest @select="saveSearch" @listScroll="blurInput" :query="query"></suggest>
+    <div ref="searchResult" class="search-result" v-show="query">
+      <suggest ref="suggest" @select="saveSearch" @listScroll="blurInput" :query="query"></suggest>
     </div>
+    <confirm @confirm="clearSearchHistory" ref="confirm" text="是否清空所有搜索历史数据" confirmBtnText="清空"></confirm>
     <!--当点击搜搜结果页跳转到相应页面-->
     <router-view></router-view>
   </div>
@@ -37,11 +44,15 @@
 <script type="text/ecmascript-6">
   import SearchBox from 'base/search-box/search-box'
   import SearchList from 'base/search-list/search-list'
+  import Confirm from 'base/confirm/confirm'
+  import Scroll from 'base/scroll/scroll'
   import {getHotKey} from 'api/search'
   import {ERR_OK} from 'api/config'
   import Suggest from 'components/suggest/suggest'
   import {mapActions,mapGetters} from 'vuex'
+  import {playlistMixin} from 'common/js/mixin'
   export default {
+    mixins:[playlistMixin],
     created(){
       this._getHotKey()
     },
@@ -52,6 +63,17 @@
       }
     },
     methods:{
+      handlePlaylist(playlist){
+        // 解决当有搜索记录，有搜索结果时候，点击播放歌曲，最小化时候，滚动组件滚动高度要自适应问题
+        const bottom = playlist.length > 0 ? '60px' : ''
+
+        this.$refs.searchResult.style.bottom = bottom
+        this.$refs.suggest.refresh()
+
+        this.$refs.shortcutWrapper.style.bottom = bottom
+        this.$refs.shortcut.refresh()
+
+      },
       addQuery(query){
         this.$refs.searchBox.setQuery(query)
       },
@@ -83,17 +105,36 @@
       },
       deleteAll(){
         this.clearSearchHistory()
+      },
+      showConfirm(){
+        this.$refs.confirm.show()
       }
     },
     computed:{
       ...mapGetters([
           'searchHistory'
-      ])
+      ]),
+      shortcut(){
+        return this.hotKey.concat(this.searchHistory)
+      }
     },
+    watch:{
+      query(newQuery){
+        //解决从suggest切换到主页的时候，搜索记录列表无法滚动的问题
+        if(!newQuery){
+          setTimeout(()=>{
+            this.$refs.shortcut.refresh()
+          },20)
+        }
+      }
+    },
+
     components:{
       SearchBox,
       Suggest,
-      SearchList
+      SearchList,
+      Confirm,
+      Scroll
     }
   }
 </script>

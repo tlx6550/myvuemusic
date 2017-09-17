@@ -62,6 +62,10 @@
       }
     },
     methods:{
+      //代理scroll刷新
+      refresh(){
+        this.$refs.suggest.refresh()
+      },
       _search(){
         // 第一次执行都重置为1 ，解决当查询条件发生变化的时候，scroll位置滚动不对
         this.page = 1
