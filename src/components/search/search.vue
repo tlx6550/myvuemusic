@@ -13,6 +13,17 @@
             </li>
           </ul>
         </div>
+        <div class="search-history" v-show="searchHistory.length">
+          <h1 class="title">
+            <span class="text">搜索历史</span>
+             <!--<span class="clear" @click="deleteAll">-->
+             <!--等价于下面，直接使用mapActions的混入方法，注意参数是否要传递，是否要显式传递，是否已经映射过来clearSearchHistory-->
+               <span class="clear" @click="clearSearchHistory">
+               <i class="icon-clear"></i>
+             </span>
+          </h1>
+          <search-list @select="addQuery" :searches="searchHistory" @delete="deleteOne"></search-list>
+        </div>
       </div>
     </div>
     <div class="search-result" v-show="query">
@@ -25,9 +36,11 @@
 
 <script type="text/ecmascript-6">
   import SearchBox from 'base/search-box/search-box'
+  import SearchList from 'base/search-list/search-list'
   import {getHotKey} from 'api/search'
   import {ERR_OK} from 'api/config'
   import Suggest from 'components/suggest/suggest'
+  import {mapActions,mapGetters} from 'vuex'
   export default {
     created(){
       this._getHotKey()
@@ -57,11 +70,30 @@
       blurInput(){
         this.$refs.searchBox.blur()
       },
-      saveSearch(){}
+      ...mapActions([
+        'saveSearchHistory',
+        'deleteSearchHistory',
+        'clearSearchHistory'
+      ]),
+      saveSearch(){
+        this.saveSearchHistory(this.query)
+      },
+      deleteOne(item){
+        this.deleteSearchHistory(item)
+      },
+      deleteAll(){
+        this.clearSearchHistory()
+      }
+    },
+    computed:{
+      ...mapGetters([
+          'searchHistory'
+      ])
     },
     components:{
       SearchBox,
-      Suggest
+      Suggest,
+      SearchList
     }
   }
 </script>

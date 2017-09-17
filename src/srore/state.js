@@ -1,4 +1,5 @@
 import {playMode} from 'common/js/config'
+import {loadSearch} from 'common/js/cache'
 // 全局状态树
 const state = {
   // 歌手对象
@@ -20,6 +21,6 @@ const state = {
   // 排行榜对象
   topList:{},
   // 搜索结果数组
-  searchHistory:[]
+  searchHistory: loadSearch()
 }
 export default state

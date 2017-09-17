@@ -1,8 +1,7 @@
 import * as types from './mutation-types'
 import {playMode} from 'common/js/config'
 import {shuffle} from '../common/js/util'
-import { createSong } from '../common/js/song'
-
+import {saveSearch,deleteSearch,clearSearch} from '../common/js/cache'
 function findIndex (list,targetSong) {
     return list.findIndex((item)=>{
       return item.id === targetSong.id
@@ -97,7 +96,15 @@ export const insertSong = function ({commit,state},song) {
   commit(types.SET_PLAYING_STATE, true)
 }
 
-//封装保存搜索结果的mutation，并把结果缓存到localstore中，以便浏览器关掉再打开可以继续查看
-/*export const saveSearchHistory = function ({commit},query) {
-
-}*/
+// 封装保存搜索结果的mutation，并把结果缓存到localstore中，以便浏览器关掉再打开可以继续查看
+export const saveSearchHistory = function ({commit}, query) {
+  commit(types.SET_SEARCH_HISTORY, saveSearch(query))
+}
+// 删除某项
+export const deleteSearchHistory = function ({commit}, query) {
+  commit(types.SET_SEARCH_HISTORY, deleteSearch(query))
+}
+// 清空搜索记录
+export const clearSearchHistory = function ({commit}) {
+  commit(types.SET_SEARCH_HISTORY, clearSearch())
+}
