@@ -104,6 +104,11 @@ For detailed explanation on how things work, checkout the [guide](http://vuejs-t
   3.优化当在移动端情景，输入框输入内容时，键盘弹入弹出的处理
   4.引入节流函数，优化快速改变搜索关键词而不断向后台发送数据请求的问题
 
+  弹窗组件搭建
+  search组件
+  优化搜索记录组件，使其可以滚动，引入mixin
+  解决当迷你播放时候，滚动组件高度自适应问题
+
 
 
 
