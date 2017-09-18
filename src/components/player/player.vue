@@ -91,11 +91,12 @@
           <i @click.stop="togglePlaying" class="icon-mini" :class="minIcon"></i>
         </progress-circle>
       </div>
-      <div class="control">
+      <div class="control" @click.stop="showPlaylist">
         <i class="icon-playlist"></i>
       </div>
     </div>
     </transition>
+    <playlist ref="playlist"></playlist>
     <audio @timeupdate="updateTime" @canplay="ready" @error="error" ref="audio" @ended="end" :src="currentSong.url"></audio>
   </div>
 </template>
@@ -110,6 +111,7 @@
   import {playMode} from 'common/js/config'
   import {shuffle} from 'common/js/util'
   import Scroll from 'base/scroll/scroll'
+  import Playlist from 'components/playlist/playlist'
   // 把歌词字符串转为制定格式
   import Lyric from 'lyric-parser'
   const transform = prefixStyle('transform')
@@ -177,6 +179,9 @@
       }),
       open(){
         this.setFullScreen(true)
+      },
+      showPlaylist(){
+        this.$refs.playlist.show()
       },
       enter(el,done){
         const {x,y,scale} = this._getPosAndScale()
@@ -483,7 +488,8 @@
     components:{
       ProgressBar,
       ProgressCircle,
-      Scroll
+      Scroll,
+      Playlist
     }
   }
 </script>

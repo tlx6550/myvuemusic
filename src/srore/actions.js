@@ -108,3 +108,25 @@ export const deleteSearchHistory = function ({commit}, query) {
 export const clearSearchHistory = function ({commit}) {
   commit(types.SET_SEARCH_HISTORY, clearSearch())
 }
+// 删除歌曲
+export const deleteSong = function ({commit,state},song) {
+  let playlist = state.playlist.slice()
+  // sequenceList 是播放模式的歌曲列表，是要映射到playlist的
+  let sequenceList = state.sequenceList.slice()
+  // currentIndex 不用添加，因为这里并不是修改其mutation
+  let currentIndex = state.currentIndex
+  let pIndex = findIndex(playlist,song)
+  playlist.splice(pIndex,1)
+  let sIndex = findIndex(sequenceList,song)
+  sequenceList.splice(sIndex,1)
+  // 如果当前播放索引大于找到的
+  if(currentIndex > pIndex || currentIndex === playlist.length){
+    currentIndex--
+  }
+  commit(types.SET_PLAYLIST, playlist)
+  commit(types.SET_SEQUENCE_LIST, sequenceList)
+  commit(types.SET_CURRENT_INDEX, currentIndex)
+  if(!playlist.length){
+    commit(types.SET_PLAYING_STATE, false)
+  }
+}
