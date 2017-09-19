@@ -1,6 +1,7 @@
 <template>
 <transition name="confirm-fade">
-  <div  @click="hideConfirm" class="confirm" v-show="showFlag">
+  <!--注意子组件点击事件，当在父组件引入时候，是否会冒泡-->
+  <div  @click.stop="hideConfirm" class="confirm" v-show="showFlag">
     <div class="confirm-wrapper">
       <div class="confirm-content">
         <p class="text">{{text}}</p>

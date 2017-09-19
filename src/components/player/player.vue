@@ -458,6 +458,11 @@
     },
     watch:{
       currentSong(newSong,oldSong){
+        // 如果删除最后一首歌曲之后
+        if(!newSong.id){
+          console.log('nosong')
+          return
+        }
         //切换模式时候，当前歌曲不要发生变化
         if(newSong.id === oldSong.id){
           return

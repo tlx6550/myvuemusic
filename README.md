@@ -109,6 +109,9 @@ For detailed explanation on how things work, checkout the [guide](http://vuejs-t
   优化搜索记录组件，使其可以滚动，引入mixin
   解决当迷你播放时候，滚动组件高度自适应问题
 
+11播放列表构建
+删除mutation创建
+
 
 
 

@@ -7,22 +7,23 @@
         <h1 class="title">
           <i class="icon"></i>
           <span class="text"></span>
-          <span class="clear"><i class="icon-clear"></i></span>
+          <span class="clear" @click.stop="showConfirm"><i class="icon-clear"></i></span>
         </h1>
       </div>
       <scroll ref="listContent" class="list-content" :data="sequenceList">
-        <ul>
-          <li ref="listItem" class="item" v-for="(item,index) in sequenceList" @click="selectItem(item,index)">
+        <!--使用transition-group执行动画，tag映射为指定标签-->
+        <transition-group name="list" tag="ul">
+          <li :key="item.id" ref="listItem" class="item" v-for="(item,index) in sequenceList" @click.stop="selectItem(item,index)">
             <i class="current" :class="getCurrentIcon(item)"></i>
             <span class="text">{{item.name}}</span>
             <span class="like">
               <i class="icon-not-favorite"></i>
             </span>
-            <span class="delete" @click="deleteOne(item)">
+            <span class="delete" @click.stop="deleteOneSong(item)">
               <i class="icon-delete"></i>
             </span>
           </li>
-        </ul>
+        </transition-group>
       </scroll>
       <div class="list-operate">
         <div class="add">
@@ -30,17 +31,18 @@
           <span class="text">添加歌曲到队列</span>
         </div>
       </div>
-      <div class="list-close"  @click="hide">
+      <div class="list-close"  @click.stop="hide">
         <span>关闭</span>
       </div>
     </div>
+    <confirm @confirm="confirmClear" ref="confirm" text="是否清空播放列表" confirmBtnText="清空"></confirm>
   </div>
 </transition>
 </template>
 
 <script type="text/ecmascript-6">
   // 从vuex获取状态树数据
-  import {mapGetters,mapMutations} from 'vuex'
+  import {mapGetters,mapMutations,mapActions} from 'vuex'
   import Scroll from 'base/scroll/scroll'
   import {playMode} from 'common/js/config'
   import Confirm from 'base/confirm/confirm'
@@ -70,6 +72,13 @@
       hide(){
         this.showFlag = false
       },
+      showConfirm(){
+        this.$refs.confirm.show()
+      },
+      confirmClear(){
+        this.deleteSongList()
+        this.hide()
+      },
       getCurrentIcon(item){
         if(this.currentSong.id === item.id){
           return 'icon-play'
@@ -88,7 +97,14 @@
         this.setCurrentIndex(index)
         this.setPlayingState(true)
       },
-      deleteOne(item){},
+      deleteOneSong(item){
+        //bug 在搜索页搜索添加歌曲列表，当删除当前播放歌曲的时候，删除 执行了两次?
+        this.deleteSong(item)
+        // 如果删除完
+        if(!this.playlist.length){
+          this.hide()
+        }
+      },
       // 滚动到当前歌曲播放列表位置
       scrollToCurrent(current){
         const index = this.sequenceList.findIndex((song)=>{
@@ -99,7 +115,11 @@
       ...mapMutations({
         'setCurrentIndex':'SET_CURRENT_INDEX',
         'setPlayingState':'SET_PLAYING_STATE'
-      })
+      }),
+      ...mapActions([
+        'deleteSong',
+        'deleteSongList'
+      ])
     },
     watch:{
       currentSong(newSong,oldSong){
@@ -112,7 +132,8 @@
       }
     },
     components:{
-      Scroll
+      Scroll,
+      Confirm
     }
   }
 </script>
