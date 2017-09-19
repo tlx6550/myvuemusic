@@ -116,6 +116,16 @@ For detailed explanation on how things work, checkout the [guide](http://vuejs-t
     3.playlist组件 使用 transition-group 内置组件处理单个dom操作时候动画执行，注意要为操作的dom分配可唯一标识的:key
     4.删除、清空播放列表mutation
 
+    1.search-list组件 使用 transition-group 内置组件处理单个dom操作时候动画执行，注意要为操作的dom分配可唯一标识的:key
+    2.switches 添加切换组件
+    3.本地存- 储保存播放列表记录封装
+    4.抽取player组件，search组件的公共js函数到mixin中
+    5.add-song 组件 添加添加歌曲组件，在该组件中灵活复用以前定义好的组件
+    6.play 组件- 引入mixin，添加savePlayHistory Actions
+    7.playlist 组件 增加添加歌曲add-song子组件
+    8.search 组件 引入mixin
+    9.保存播放历史 actions添加
+    10.1.top-tip 添加歌曲提醒组件，优化交互体验，注意定时器多次被调用时候，要注意清空共用的定时器
 
 
 
