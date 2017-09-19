@@ -5,8 +5,8 @@
     <div class="list-wrapper" @click.stop>
       <div class="list-header">
         <h1 class="title">
-          <i class="icon"></i>
-          <span class="text"></span>
+          <i class="icon" :class="iconMode" @click="changeMode"></i>
+          <span class="text">{{modeText}}</span>
           <span class="clear" @click.stop="showConfirm"><i class="icon-clear"></i></span>
         </h1>
       </div>
@@ -26,7 +26,7 @@
         </transition-group>
       </scroll>
       <div class="list-operate">
-        <div class="add">
+        <div class="add" @click.stop="addSong">
           <i class="icon-add"></i>
           <span class="text">添加歌曲到队列</span>
         </div>
@@ -36,6 +36,7 @@
       </div>
     </div>
     <confirm @confirm="confirmClear" ref="confirm" text="是否清空播放列表" confirmBtnText="清空"></confirm>
+    <add-song ref="addSong"></add-song>
   </div>
 </transition>
 </template>
@@ -46,21 +47,30 @@
   import Scroll from 'base/scroll/scroll'
   import {playMode} from 'common/js/config'
   import Confirm from 'base/confirm/confirm'
+  import {playerMixin} from 'common/js/mixin'
+  import AddSong from 'components/add-song/add-song'
   export default {
+    mixins:[playerMixin],
     data(){
       return {
         showFlag:false
       }
     },
     computed:{
-      ...mapGetters([
+      modeText(){
+        return this.mode === playMode.sequence ? '顺序播放' : this.mode === playMode.random ? '随机播放' : '单曲循环'
+      }
+   /*   ...mapGetters([
         'sequenceList',
         'currentSong',
         'playlist',
         'mode'
-      ])
+      ])*/
     },
     methods:{
+      addSong(){
+        this.$refs.addSong.show()
+      },
       show(){
         this.showFlag = true
         // 列表切换到显示，才开始真正计算滚动的dom，否则滚动无效
@@ -113,8 +123,8 @@
         this.$refs.listContent.scrollToElement(this.$refs.listItem[index],300)
       },
       ...mapMutations({
-        'setCurrentIndex':'SET_CURRENT_INDEX',
-        'setPlayingState':'SET_PLAYING_STATE'
+        /*'setCurrentIndex':'SET_CURRENT_INDEX',
+        'setPlayingState':'SET_PLAYING_STATE'*/
       }),
       ...mapActions([
         'deleteSong',
@@ -133,7 +143,8 @@
     },
     components:{
       Scroll,
-      Confirm
+      Confirm,
+      AddSong
     }
   }
 </script>

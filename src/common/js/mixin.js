@@ -2,7 +2,6 @@
 import {mapGetters, mapMutations, mapActions} from 'vuex'
 import {playMode} from 'common/js/config'
 import {shuffle} from 'common/js/util'
-
 // 所引组件一定要执行这些函数,否则就会抛异常,
 // 定义组件时候,所定义的同名方法会覆盖这里定义的
 export const playlistMixin = {
@@ -31,6 +30,80 @@ export const playlistMixin = {
   }
 }
 
+export const playerMixin = {
+  computed:{
+    iconMode(){
+      return this.mode === playMode.sequence ? 'icon-sequence': this.mode === playMode.loop ?  'icon-loop' : 'icon-random'
+    },
+    ...mapGetters([
+      'sequenceList',
+      'currentSong',
+      'playlist',
+      'mode'
+    ])
+  },
+  methods:{
+    changeMode(){
+      const  mode = (this.mode + 1) % 3
+      this.setPlayMode(mode)
+      let list = null
+      if(mode === playMode.random){
+        list = shuffle(this.sequenceList)
+      }else {
+        list = this.sequenceList
+      }
+      // 当歌曲列表顺序改变时候，要保证当前播放的歌曲不改变
+      this.resetCurrentIndex(list)
+      this.setPlayList(list)
+    },
+    resetCurrentIndex(list){
+      // findIndex es6 语法
+      let index = list.findIndex((item)=>{
+        return item.id === this.currentSong.id
+      })
+      this.setCurrentIndex(index)
+    },
+    ...mapMutations({
+      setPlayingState:'SET_PLAYING_STATE',
+      setCurrentIndex:'SET_CURRENT_INDEX',
+      setPlayMode:'SET_PLALY_MODE',
+      setPlayList:'SET_PLAYLIST'
+    })
+  },
+
+}
+export const searchMixin = {
+  data(){
+    return {
+      query:''
+   }
+  },
+  computed:{
+    ...mapGetters([
+      'searchHistory'
+    ])
+  },
+  methods:{
+    // 解决当在移动端情景，在搜索输入框输入关键词时候，默认会调用
+    //移动端的键盘事件，如果输入后，用户需要滚动，则需要把该事件屏蔽
+    blurInput(){
+      this.$refs.searchBox.blur()
+    },
+    saveSearch(){
+      this.saveSearchHistory(this.query)
+    },
+    onQueryChange(query){
+      this.query = query
+    },
+    addQuery(query){
+      this.$refs.searchBox.setQuery(query)
+    },
+    ...mapActions([
+      'saveSearchHistory',
+      'deleteSearchHistory'
+    ])
+  }
+}
 /*export const playerMixin = {
   computed: {
     iconMode() {

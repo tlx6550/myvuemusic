@@ -50,16 +50,16 @@
   import {ERR_OK} from 'api/config'
   import Suggest from 'components/suggest/suggest'
   import {mapActions,mapGetters} from 'vuex'
-  import {playlistMixin} from 'common/js/mixin'
+  import {playlistMixin,searchMixin} from 'common/js/mixin'
   export default {
-    mixins:[playlistMixin],
+    mixins:[playlistMixin, searchMixin],
     created(){
       this._getHotKey()
     },
     data(){
       return {
-        hotKey:[],
-        query:''
+        hotKey:[]/*,
+        query:''*/
       }
     },
     methods:{
@@ -74,12 +74,12 @@
         this.$refs.shortcut.refresh()
 
       },
-      addQuery(query){
+     /* addQuery(query){
         this.$refs.searchBox.setQuery(query)
-      },
-      onQueryChange(query){
+      },*/
+      /*onQueryChange(query){
         this.query = query
-      },
+      },*/
       _getHotKey(){
         getHotKey().then((res)=>{
           if (res.code === ERR_OK){
@@ -87,32 +87,32 @@
           }
         })
       },
-      // 解决当在移动端情景，在搜索输入框输入关键词时候，默认会调用
+      /*// 解决当在移动端情景，在搜索输入框输入关键词时候，默认会调用
       //移动端的键盘事件，如果输入后，用户需要滚动，则需要把该事件屏蔽
       blurInput(){
         this.$refs.searchBox.blur()
-      },
+      },*/
       ...mapActions([
-        'saveSearchHistory',
-        'deleteSearchHistory',
+        /*'saveSearchHistory',
+        'deleteSearchHistory',*/
         'clearSearchHistory'
       ]),
-      saveSearch(){
+      /*saveSearch(){
         this.saveSearchHistory(this.query)
-      },
+      },*/
       deleteOne(item){
         this.deleteSearchHistory(item)
       },
-      deleteAll(){
+      /*没使用到 deleteAll(){
         this.clearSearchHistory()
-      },
+      },*/
       showConfirm(){
         this.$refs.confirm.show()
       }
     },
     computed:{
       ...mapGetters([
-          'searchHistory'
+         /* 'searchHistory'*/ // 移到minxin
       ]),
       shortcut(){
         return this.hotKey.concat(this.searchHistory)

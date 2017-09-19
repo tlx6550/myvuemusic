@@ -6,6 +6,7 @@ const SEARCH_KEY = '__search__'
 const SEARCH_MAX_LEN = 15
 
 const PLAY_KEY = '__play__'
+// 最多已播放数目
 const PLAY_MAX_LEN = 200
 
 const FAVORITE_KEY = '__favorite__'
@@ -65,7 +66,7 @@ export function clearSearch() {
 export function loadSearch() {
   return storage.get(SEARCH_KEY, [])
 }
-
+// 保存播放列表记录
 export function savePlay(song) {
   let songs = storage.get(PLAY_KEY, [])
   insertArray(songs, song, (item) => {
@@ -74,7 +75,6 @@ export function savePlay(song) {
   storage.set(PLAY_KEY, songs)
   return songs
 }
-
 export function loadPlay() {
   return storage.get(PLAY_KEY, [])
 }

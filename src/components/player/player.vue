@@ -102,14 +102,15 @@
 </template>
 
 <script type="text/ecmascript-6">
-  import {mapGetters,mapMutations} from 'vuex'
+  import {mapGetters,mapMutations,mapActions} from 'vuex'
   // 创建关键帧动画脚本
   import animations from 'create-keyframe-animation'
   import ProgressBar from 'base/progress-bar/progress-bar'
   import ProgressCircle from 'base/progress-circle/progress-circle'
   import {prefixStyle} from 'common/js/dom'
   import {playMode} from 'common/js/config'
-  import {shuffle} from 'common/js/util'
+  import {playerMixin} from 'common/js/mixin'
+  // import {shuffle} from 'common/js/util'
   import Scroll from 'base/scroll/scroll'
   import Playlist from 'components/playlist/playlist'
   // 把歌词字符串转为制定格式
@@ -117,6 +118,7 @@
   const transform = prefixStyle('transform')
   const transitionDuration = prefixStyle('transitionDuration')
   export default {
+    mixins:[playerMixin],
     data(){
      return {
        songReady:false,
@@ -137,12 +139,12 @@
       // mapGetters 辅助函数仅仅是将 store 中的 getters 映射到局部计算属性：
       ...mapGetters([
         'fullScreen',
+        'playing',
+        'currentIndex'/*,
         'playlist',
         'currentSong',
-        'playing',
-        'currentIndex',
         'mode',
-        'sequenceList'
+        'sequenceList'*/
       ]),
       playIcon(){
         return this.playing ? 'icon-pause' : 'icon-play'
@@ -158,10 +160,11 @@
       },
       percent(){
         return this.currentTime / this.currentSong.duration
-      },
+      }/*,
+      转移到mixin
       iconMode(){
         return this.mode === playMode.sequence ? 'icon-sequence': this.mode === playMode.loop ?  'icon-loop' : 'icon-random'
-      }
+      }*/
     },
     created(){
       this.touch = {}
@@ -171,12 +174,15 @@
         this.setFullScreen(false)
       },
       ...mapMutations({
-        setFullScreen:'SET_FULL_SCREEN',
+        setFullScreen:'SET_FULL_SCREEN'/*,
         setPlayingState:'SET_PLAYING_STATE',
         setCurrentIndex:'SET_CURRENT_INDEX',
         setPlayMode:'SET_PLALY_MODE',
-        setPlayList:'SET_PLAYLIST'
+        setPlayList:'SET_PLAYLIST'*/
       }),
+      ...mapActions([
+        'savePlayHistory'
+      ]),
       open(){
         this.setFullScreen(true)
       },
@@ -291,6 +297,8 @@
       },
       ready(){
         this.songReady = true
+        // 提交actions
+        this.savePlayHistory(this.currentSong)
       },
       // 当出现网络异常等情况
       error(){
@@ -328,7 +336,7 @@
           this.currentLyric.seek(currentTime * 1000)
         }
       },
-      changeMode(){
+     /* changeMode(){ // 转移到mixin
         const  mode = (this.mode + 1) % 3
         this.setPlayMode(mode)
         let list = null
@@ -340,14 +348,14 @@
         // 当歌曲列表顺序改变时候，要保证当前播放的歌曲不改变
         this.resetCurrentIndex(list)
         this.setPlayList(list)
-      },
-      resetCurrentIndex(list){
+      },*/
+      /*resetCurrentIndex(list){
         // findIndex es6 语法
         let index = list.findIndex((item)=>{
           return item.id === this.currentSong.id
         })
         this.setCurrentIndex(index)
-      },
+      },*/
       end(){
         // 如果是单曲循环播放
         if(this.mode === playMode.loop){
