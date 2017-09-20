@@ -125,7 +125,7 @@ For detailed explanation on how things work, checkout the [guide](http://vuejs-t
     7.playlist 组件 增加添加歌曲add-song子组件
     8.search 组件 引入mixin
     9.保存播放历史 actions添加
-    10.1.top-tip 添加歌曲提醒组件，优化交互体验，注意定时器多次被调用时候，要注意清空共用的定时器
+    10.top-tip 添加歌曲提醒组件，优化交互体验，注意定时器多次被调用时候，要注意清空共用的定时器
 
 
 

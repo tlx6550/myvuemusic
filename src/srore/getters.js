@@ -18,3 +18,4 @@ export const disc = state => state.disc
 export const topList = state => state.topList
 export const searchHistory = sate => state.searchHistory
 export const playHistory = sate => state.playHistory
+export const favoriteList = sate => state.favoriteList

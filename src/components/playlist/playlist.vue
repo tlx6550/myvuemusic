@@ -12,12 +12,13 @@
       </div>
       <scroll ref="listContent" class="list-content" :data="sequenceList">
         <!--使用transition-group执行动画，tag映射为指定标签-->
-        <transition-group name="list" tag="ul">
+        <!--由于动画执行需要时间（约100ms），而滚动组件监听数据变化是20ms，所以需要定制变化时间，使得滚动高度正确-->
+        <transition-group name="list" tag="ul" :refreshDelay="refreshDelay">
           <li :key="item.id" ref="listItem" class="item" v-for="(item,index) in sequenceList" @click.stop="selectItem(item,index)">
             <i class="current" :class="getCurrentIcon(item)"></i>
             <span class="text">{{item.name}}</span>
-            <span class="like">
-              <i class="icon-not-favorite"></i>
+            <span @click.stop="toggleFavorite(item)" class="like">
+              <i :class="getFavoriteIcon(item)"></i>
             </span>
             <span class="delete" @click.stop="deleteOneSong(item)">
               <i class="icon-delete"></i>
@@ -53,7 +54,8 @@
     mixins:[playerMixin],
     data(){
       return {
-        showFlag:false
+        showFlag:false,
+        refreshDelay:100
       }
     },
     computed:{

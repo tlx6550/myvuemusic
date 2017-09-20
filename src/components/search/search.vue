@@ -8,7 +8,7 @@
       针对该组件有两个并级的元素，需要引人一个div包裹他们-->
       <!--绑定的data是用一个计算属性shotcut，因为其子元素的数据都是异步获取的，
       所以只要其中一个变化，那么data将再次计算-->
-      <scroll ref="shortcut" class="shortcut" :data="shortcut">
+      <scroll :refreshDelay="refreshDelay" ref="shortcut" class="shortcut" :data="shortcut">
         <div>
           <div class="hot-key">
             <h1 class="title">热门搜索</h1>

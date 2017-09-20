@@ -8,7 +8,7 @@ const SEARCH_MAX_LEN = 15
 const PLAY_KEY = '__play__'
 // 最多已播放数目
 const PLAY_MAX_LEN = 200
-
+// 收藏key
 const FAVORITE_KEY = '__favorite__'
 const FAVORITE_MAX_LEN = 200
 // 定义插入数组方法，保证最新查询到的放在最前面
