@@ -136,6 +136,12 @@ For detailed explanation on how things work, checkout the [guide](http://vuejs-t
     <!--由于动画执行需要时间（约100ms），而滚动组件监听数据变化是20ms，所以需要定制变化时间，使得滚动高度正确-->
     6.添加个人中心user-center组件
 
+13  player组件 优化快速切换前进后退，歌词不同步问题
+    this.currentSong.lyric 意为当前歌曲的歌词（可以查看获取当前歌曲的getter是怎么计算的）
+    song里面有lyric的属性，
+    与Song的构造函数有所区别
+
+
 
 
 
