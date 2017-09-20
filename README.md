@@ -145,6 +145,17 @@ For detailed explanation on how things work, checkout the [guide](http://vuejs-t
     prod.server.js 生产环境启动app配置
 
 
+    webpack 2中,我们可以使用动态 import语法，将路由由同步加载改为按需加载
+
+    package.json中
+    devDependencies的
+    vue-template-compiler
+    一定要和
+    dependencies的
+    vue 版本保持一致
+    （实际中发现只要vue大于ue-template-compiler?）
+
+
 
 
 
