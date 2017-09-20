@@ -141,6 +141,8 @@ For detailed explanation on how things work, checkout the [guide](http://vuejs-t
     song里面有lyric的属性，
     与Song的构造函数有所区别
 
+    config/index.js 配置生产环境端口 9000
+    prod.server.js 生产环境启动app配置
 
 
 
