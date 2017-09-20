@@ -127,5 +127,16 @@ For detailed explanation on how things work, checkout the [guide](http://vuejs-t
     9.保存播放历史 actions添加
     10.top-tip 添加歌曲提醒组件，优化交互体验，注意定时器多次被调用时候，要注意清空共用的定时器
 
+12  个人中心组件构建
+    1.scroll组件 优化刷新延迟时间，可传值
+    2.收藏歌单本地存储封装
+    3.m-header组件 引入个人中心user组件，并添加路由映射
+    4.player 收藏图标按钮操作移到mixin中
+    5.凡是用到transiton-group组件需要优化滚动组件scroll刷新时间
+    <!--由于动画执行需要时间（约100ms），而滚动组件监听数据变化是20ms，所以需要定制变化时间，使得滚动高度正确-->
+    6.添加个人中心user-center组件
+
+
+
 
 

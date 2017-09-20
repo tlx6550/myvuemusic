@@ -97,7 +97,9 @@
     </div>
     </transition>
     <playlist ref="playlist"></playlist>
-    <audio @timeupdate="updateTime" @canplay="ready" @error="error" ref="audio" @ended="end" :src="currentSong.url"></audio>
+    <!--canplay:当文件就绪可以开始播放时运行的脚本（缓冲已足够开始时）
+    play:当媒介已就绪可以开始播放时运行的脚本。-->
+    <audio @timeupdate="updateTime" @play="ready" @error="error" ref="audio" @ended="end" :src="currentSong.url"></audio>
   </div>
 </template>
 
@@ -262,6 +264,8 @@
         // 当歌手歌曲只有一首
         if(this.playlist.length === 1){
           this.loop()
+          // bug-当歌曲只有一首，点击下一首时候，状态不用改变
+          return
         }else {
           let index = this.currentIndex + 1
           if(index === this.playlist.length){
@@ -282,6 +286,8 @@
         }
         if(this.playlist.length === 1){
           this.loop()
+          // bug-当歌曲只有一首，点击上一首时候，状态不用改变
+          return
         }else {
           let index = this.currentIndex - 1
           if(index === -1){
@@ -376,6 +382,11 @@
       getLyric(){
         // song的构造方法
         this.currentSong.getLyric().then((lyric)=>{
+          // 获取歌词是一个异步过程，当歌曲操作快速前进后退，会导致歌词获取不同步
+          // 歌曲还没有歌词，就返回
+          if(this.currentSong.lyric !==lyric){
+            return
+          }
           // 歌词解码
           this.currentLyric = new Lyric(lyric,this.handleLyric)
           if( this.playing){
@@ -478,9 +489,14 @@
         // 解决当快速前进 后退时候，歌词滚动乱跳问题
         if(this.currentLyric){
           this.currentLyric.stop()
+          this.currentTime = 0
+          this.playingLyric = ''
+          this.currentLineNum = 0
         }
         // 为了保证在微信端打开，从后台切换到前台不播放问题？
-        setTimeout(()=>{
+        // 有可能歌曲ready状态是在1s以内完成的，当快速点击前进后退时候，要处理
+        clearTimeout(this.timer)
+       this.timer =  setTimeout(()=>{
           this.$refs.audio.play()
           this.getLyric()
         },1000)
