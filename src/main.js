@@ -9,6 +9,11 @@ import store from './srore'
 import 'common/stylus/index.styl'
 import VueLazyLoad from 'vue-lazyload'
 
+// import变量，但是没使用，所以定义如下，规避eslin语法检查
+/* eslint-disable no-unused-vars */
+import vConsole from 'vconsole'
+// 这样在手机端就可以查看控制台的信息了
+console.log('text')
 /* 解决移动端300毫秒延迟问题 */
 fastclick.attach(document.body)
 Vue.use(VueLazyLoad, {

@@ -155,6 +155,11 @@ For detailed explanation on how things work, checkout the [guide](http://vuejs-t
     vue 版本保持一致
     （实际中发现只要vue大于ue-template-compiler?）
 
+ 14
+   1.Tencent 的调试工具vConsole
+   一个轻量、可拓展、针对手机网页的前端开发者调试面板。
+   2 抓包工具 ios：Charles，windows：fiddler
+
 
 
 
