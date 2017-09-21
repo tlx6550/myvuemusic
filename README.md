@@ -159,7 +159,10 @@ For detailed explanation on how things work, checkout the [guide](http://vuejs-t
    1.Tencent 的调试工具vConsole
    一个轻量、可拓展、针对手机网页的前端开发者调试面板。
    2 抓包工具 ios：Charles，windows：fiddler
-
+15
+  项目打包编译，已发布到https://github.com/tlx6550/laimusic6550
+  线上外网访问地址：
+  https://lai6550.herokuapp.com
 
 
 
