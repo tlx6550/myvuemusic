@@ -164,6 +164,15 @@ For detailed explanation on how things work, checkout the [guide](http://vuejs-t
   线上外网访问地址：
   https://lai6550.herokuapp.com
 
+项目知识点巩固
+recommend栏目
+  1.伸缩盒模型flex布局
+  http://www.ruanyifeng.com/blog/2015/07/flex-grammar.html
+  2.切换路由引入组件的过度动画，在被引入的组件定义动画
+  3.当要加载的图片大小未知，但是需要预留合适的位置给图片占用，可以先设置其高度为0，padding-top设置为百分比（如70%），这样图片就可以根据百分百自动缩放占据位置了
+
+singer栏目
+ 1.利用构造函数新建类，使得实例具有某些共同属性
 
 
 
